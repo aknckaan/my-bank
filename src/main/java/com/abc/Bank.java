@@ -1,22 +1,25 @@
 package com.abc;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class Bank {
-    private List<Customer> customers;
-
+    //private List<Customer> customers;
+    private HashMap<Integer,Customer> customers;
     public Bank() {
-        customers = new ArrayList<Customer>();
+        customers = new HashMap<Integer, Customer>();
     }
 
     public void addCustomer(Customer customer) {
-        customers.add(customer);
+
+        if (customers.containsKey(customer.cus_number))
+            throw new IllegalArgumentException("This customer already exists!");
+        customers.put(customer.cus_number,customer);
     }
 
     public String customerSummary() {
         String summary = "Customer Summary";
-        for (Customer c : customers)
+
+        for (Customer c : customers.values())
             summary += "\n - " + c.getName() + " (" + format(c.getNumberOfAccounts(), "account") + ")";
         return summary;
     }
@@ -29,7 +32,7 @@ public class Bank {
 
     public double totalInterestPaid() {
         double total = 0;
-        for(Customer c: customers)
+        for(Customer c: customers.values())
             total += c.totalInterestEarned();
         return total;
     }
